@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Legendas - Profissional</title>
+    <title>Gerador de Legendas - Wagner</title>
     <link rel="manifest" href="./manifest.json">
     <style>
         body {
@@ -28,6 +28,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             font-size: 1.4rem;
+            margin-bottom: 25px;
         }
 
         label {
@@ -37,9 +38,9 @@
             color: #00f2ff;
         }
 
-        input, select, textarea {
+        input, select {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: #111;
             border: 2px solid #00f2ff;
             border-radius: 8px;
@@ -47,12 +48,13 @@
             font-size: 1rem;
             box-sizing: border-box;
             outline: none;
+            margin-bottom: 10px;
         }
 
         button {
             width: 100%;
-            padding: 15px;
-            margin-top: 20px;
+            padding: 16px;
+            margin-top: 25px;
             background-color: #00f2ff;
             color: #000;
             border: none;
@@ -64,20 +66,16 @@
             transition: 0.3s;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
-
         #resultado {
-            margin-top: 20px;
-            padding: 15px;
+            margin-top: 25px;
+            padding: 18px;
             background: #111;
             border: 1px dashed #00f2ff;
             border-radius: 8px;
-            white-space: pre-wrap; /* Essencial para manter os espaços dos 8 parágrafos */
-            min-height: 150px;
-            font-size: 0.95rem;
-            line-height: 1.5;
+            white-space: pre-wrap; /* Mantém as quebras de linha */
+            min-height: 200px;
+            font-size: 1rem;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -87,68 +85,77 @@
     <h1>Gerador de Legendas</h1>
 
     <label for="tema">Tema do Vídeo:</label>
-    <input type="text" id="tema" placeholder="Ex: Disciplina e Foco...">
+    <input type="text" id="tema" placeholder="Ex: disciplina inabalável...">
 
     <label for="cta-select">Estilo da Chamada (CTA):</label>
     <select id="cta-select">
-        <option value="Crie uma CTA pedindo para comentar uma palavra-chave como 'FOCO' ou 'MENTE'">Palavra-chave (Engajamento)</option>
-        <option value="Crie uma pergunta reflexiva para os seguidores responderem">Pergunta de Engajamento</option>
-        <option value="Direcione o seguidor para clicar no link da bio para conhecer o Kriptum">Link na Bio (Vendas)</option>
-        <option value="Peça para o seguidor salvar este post para revisar depois">Salvar Post</option>
+        <option value="Peça para comentarem uma palavra-chave (Ex: Comente 'FOCO')">Palavra-chave (Engajamento)</option>
+        <option value="Faça uma pergunta reflexiva para os seguidores">Pergunta de Reflexão</option>
+        <option value="Diga para clicarem no link da Bio">Link na Bio (Vendas)</option>
+        <option value="Peça para o seguidor salvar este post">Salvar Post</option>
     </select>
 
     <button id="btn-gerar">Gerar Legenda Dark</button>
 
     <label>Resultado:</label>
-    <div id="resultado">Sua legenda aparecerá aqui...</div>
+    <div id="resultado">Aguardando...</div>
 </div>
 
 <script>
+    const API_KEY = "SUA_CHAVE_AQUI"; 
+
     document.getElementById('btn-gerar').addEventListener('click', async () => {
         const tema = document.getElementById('tema').value;
         const ctaInstrucao = document.getElementById('cta-select').value;
         const resultadoDiv = document.getElementById('resultado');
 
         if (!tema) {
-            alert("Digite o tema do vídeo!");
+            alert("Digite o tema!");
             return;
         }
 
-        resultadoDiv.innerText = "Gerando sua legenda profissional...";
+        resultadoDiv.innerText = "Processando legenda...";
 
-        // Montagem do prompt com as regras de 8 parágrafos e espaçamento
+        // Prompt atualizado com Título Minúsculo e Espaço antes das #
         const promptSystem = `
-            Atue como um especialista em Dark Edits e Copywriting.
+            Atue como especialista em Copywriting para Instagram.
             Crie uma legenda sobre: ${tema}.
             
-            ESTRUTURA OBRIGATÓRIA:
-            1. TÍTULO: Um título curto e impactante em letras MAIÚSCULAS no início.
-            2. CONTEÚDO: Exatamente 8 parágrafos pequenos e motivacionais.
-            3. ESPAÇAMENTO: Deve haver uma linha em branco (quebra dupla) entre o título, entre cada um dos 8 parágrafos, antes da CTA e antes das hashtags.
-            4. CTA: ${ctaInstrucao}.
-            5. HASHTAGS: Adicione 6 hashtags relevantes no final.
-            6. ESTILO: Sem muitos emojis, tom profissional e de autoridade.
+            REGRAS DE FORMATAÇÃO:
+            1. TÍTULO: Um título curto em letras MINÚSCULAS (apenas a primeira letra da frase maiúscula).
+            2. CORPO: 8 parágrafos pequenos e impactantes.
+            3. CTA: ${ctaInstrucao}.
+            4. ESPAÇAMENTO: Use UMA LINHA EM BRANCO entre:
+               - O título e o primeiro parágrafo.
+               - Cada um dos 8 parágrafos.
+               - O último parágrafo e a CTA.
+               - A CTA e as hashtags (isso é obrigatório).
+            5. HASHTAGS: Termine com 6 hashtags.
+            6. ESTILO: Profissional e direto.
         `;
 
         try {
-            // --- INSIRA SUA LÓGICA DE API EXISTENTE ABAIXO ---
-            // Exemplo: const texto = await suaFuncaoChamadaApi(promptSystem);
-            
-            // resultadoDiv.innerText = texto;
-            console.log("Prompt pronto para envio:", promptSystem);
-            
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: promptSystem }] }]
+                })
+            });
+
+            const data = await response.json();
+            const textoFinal = data.candidates[0].content.parts[0].text;
+            resultadoDiv.innerText = textoFinal;
+
         } catch (error) {
-            resultadoDiv.innerText = "Erro ao gerar legenda. Tente novamente.";
-            console.error(error);
+            resultadoDiv.innerText = "Erro na API. Verifique a chave.";
         }
     });
 
-    // Registro do PWA conforme verificado anteriormente
+    // Registro do PWA
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('PWA ativo com sucesso!'))
-                .catch(err => console.log('Erro no PWA:', err));
+            navigator.serviceWorker.register('./sw.js');
         });
     }
 </script>
