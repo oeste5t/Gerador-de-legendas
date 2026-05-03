@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="dark">
 <head>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="logo.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerador de Legendas Dark Pro</title>
@@ -794,5 +797,15 @@ Não adicione nenhuma outra explicação, devolva apenas o texto.`;
             document.body.removeChild(textArea);
         }
     </script>
+    <script>
+        // Registrar o Service Worker para o PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('PWA ativado com sucesso!', reg.scope))
+                    .catch(err => console.log('Falha ao ativar PWA:', err));
+            });
+        }
+            </script>
 </body>
           </html>
